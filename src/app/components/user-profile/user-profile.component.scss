@@ -1,0 +1,25 @@
+.outer-profile{
+    display: flex;
+}
+
+img{
+    object-fit: fill;
+}
+
+.profile-image{
+    width: 10%;
+    height: auto;
+    margin: 1rem 2rem;
+}
+
+.profile-right{
+    margin: auto;
+    margin-left: 0;
+    text-align: left;
+    align-items: center;
+    line-height: 2rem;
+}
+
+.profile-lower{
+    margin: 1rem 2rem;
+}

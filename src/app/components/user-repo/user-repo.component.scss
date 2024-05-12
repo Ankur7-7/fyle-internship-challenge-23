@@ -1,0 +1,38 @@
+.outer-card{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.repo-card{
+    width: 42rem;
+    min-height: 10rem;
+    margin: 1rem 2rem;
+    padding: 2rem 1rem;
+    border: solid black 2px;
+}
+
+.repo-name{
+    color: rgb(0, 140, 254);
+    font-weight: bolder;
+    font-size:24px;
+}
+
+.repo-description{
+    color: black;
+}
+
+.repo-tags{
+    display: flex;
+    flex-wrap:wrap;
+}
+
+.tags{    
+    background-color: rgb(0, 140, 254);
+    color: white;
+    max-width:max-content;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    
+}

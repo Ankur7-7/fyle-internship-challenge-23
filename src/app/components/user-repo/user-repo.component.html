@@ -1,0 +1,17 @@
+<mat-card class="outer-card" *ngIf = "Repos.length != 0">
+    <mat-card class="repo-card" *ngFor="let repo of paginated_Repos">
+        <mat-card-title class="repo-name">{{repo.name}}</mat-card-title>
+        <mat-card-subtitle class="repo-description">{{repo.description}}</mat-card-subtitle>
+        <div class="repo-tags" *ngIf="repo.tags.length!=0">
+            <div class="tags" *ngFor="let tag of repo.tags">
+                {{tag.name}}
+            </div>
+        </div> 
+    </mat-card>
+    <mat-paginator
+    [length]="Repos.length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="onPageChange($event)">
+    </mat-paginator>
+</mat-card>

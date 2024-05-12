@@ -1,5 +1,2 @@
-<div class="grid h-screen place-items-center">
-  <div class="font-bold text-3xl">
-    Fyle Internship Challenge
-  </div>
-</div>
+<app-search (display_user) = "GetUserInfo($event)"></app-search>
+<app-user-info [UserData] = "user_data" [RepoData]="repo_data"></app-user-info>

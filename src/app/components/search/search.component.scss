@@ -1,0 +1,24 @@
+.search-bar{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin: 1rem 2rem;
+    height: 4rem;
+    width: 100%;
+}
+
+.search-text{
+    width: 40%;
+    border: black solid;
+    padding: 1rem;
+}
+
+.search-btn{
+    margin-left: 2rem;
+    background-color: black;
+    color: white;
+    height:fit-content;
+    min-width: max-content;
+    padding: 1rem;
+    border-radius: 10px;
+}
