@@ -12,21 +12,23 @@ Before running the application, ensure you have the following installed:
   
 ## Installation
 
-Clone the repository to your local machine:
-git clone <repository-url>
+<b>Step 1:</b> Clone the repository to your local machine:
+<br>
+git clone
 
-Navigate to the project directory:
+<b>Step 2:</b>Navigate to the project directory:
+<br>
 cd <project-directory>
 
-Install dependencies using npm:
-npm install
+<b>Step 3:</b>Install dependencies using npm:
+<br>npm install
 
-Running the Application
-To run the Angular application locally, use the following command:
-ng serve
+<b>Step 4:</b>Running the Application
+<br>To run the Angular application locally, use the following command:
+<br>ng serve
 
 By default, the application will be served at http://localhost:4200/. Open your web browser and navigate to this URL to view the application.
 
-Running Tests
+## Running Tests
 This project uses Jasmine and Karma for unit testing. To run tests, use the following command:
-ng test
+<br>ng test
