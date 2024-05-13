@@ -8,8 +8,9 @@ import {PageEvent} from "@angular/material/paginator";
 })
 export class UserRepoComponent implements OnInit, OnChanges{
 
-  @Input() Repos !: any;
-  paginated_Repos !: any;
+  @Input() Repos !: any[];
+  paginated_Repos !: any[];
+  
 
   pageEvent!: PageEvent;
   pageSize = 10;

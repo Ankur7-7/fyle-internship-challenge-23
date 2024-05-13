@@ -1,8 +1,8 @@
-<mat-card class="outer-card" *ngIf = "Repos.length != 0">
+<mat-card class="outer-card" *ngIf = "Repos.length > 0">
     <mat-card class="repo-card" *ngFor="let repo of paginated_Repos">
         <mat-card-title class="repo-name">{{repo.name}}</mat-card-title>
         <mat-card-subtitle class="repo-description">{{repo.description}}</mat-card-subtitle>
-        <div class="repo-tags" *ngIf="repo.tags.length!=0">
+        <div class="repo-tags">
             <div class="tags" *ngFor="let tag of repo.tags">
                 {{tag.name}}
             </div>

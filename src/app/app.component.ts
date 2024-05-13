@@ -1,7 +1,9 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from './services/api.service';
 import {User} from './user';
 import {Repo} from './repo';
+import { forkJoin, of, Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -12,15 +14,15 @@ export class AppComponent implements OnInit{
   user_name!: string;
   user_data!: User;
   repo_data : Repo[]=[];
+  user_exist :boolean=false;
+
   repo !: Repo;
   repoUrl ?: string;
   no_of_repos : number=0;
   count :number=0;
-  user_exist :boolean=false;
+  
 
-  constructor(
-    private apiService: ApiService
-  ) {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
     // this.apiService.getUser('johnpapa').subscribe(console.log);
@@ -28,7 +30,8 @@ export class AppComponent implements OnInit{
 
   GetUserInfo(search_user: string): void{
     console.log(search_user);
-    this.user_name = search_user;
+
+    this.user_name = search_user.toLowerCase();
     this.user_data={
       "name": "",
       "bio": "",
@@ -40,25 +43,29 @@ export class AppComponent implements OnInit{
     };
     this.repo_data = [];
 
-    if(localStorage[search_user]){
-      this.user_data = JSON.parse(localStorage[search_user]);
-      this.repo_data = JSON.parse(localStorage["repo-"+ search_user]);
-      // console.log(this.user_data);
-      // console.log(this.repo_data);
+    const StoredUserName = localStorage[this.user_name];
+    const StoredRepoData = localStorage["repo-"+ this.user_name];
+
+    if(StoredUserName && StoredRepoData){
+      this.user_data = JSON.parse(StoredUserName);
+      this.repo_data = JSON.parse(StoredRepoData);
+      this.user_exist = true;
       return;
     }
 
-    this.apiService.getUser(search_user).subscribe((data)=>{
-      // console.log(data.name);
-      // console.log(typeof data.name);
+    this.apiService.getUserData(this.user_name).pipe(
+      catchError(error =>{
+        console.error('Error fetching user data:', error);
+        this.user_exist = false;
+        return of(null);
+      }),
+      map((data: any) => {
+        if(data?.message === 'Not Found') {
+          console.log('User not found');
+          return null;
+        }
 
-      if(data?.message=="Not Found"){
-        console.log("user not found");
-        return;
-      }
-      
       this.user_exist = true;
-
       this.user_data.name = data.name;
       this.user_data.bio = data.bio;
       this.user_data.location = data.location;
@@ -67,65 +74,46 @@ export class AppComponent implements OnInit{
       this.user_data.repoURL = data.repos_url; 
       this.user_data.profileURL = data.avatar_url;
 
-      // console.log(this.user_data);
+      localStorage.setItem(this.user_name, JSON.stringify(this.user_data));
 
-      localStorage[this.user_name] = JSON.stringify(this.user_data);
+      return data;
+      }),
+    catchError(error=> of(null))
+  ).subscribe((userData)=>{
+      if(userData!=null)
+        this.getRepo(this.user_data.repoURL);
+      });
+    }
 
-      this.getRepo(this.user_data.repoURL)
+  getRepo(url: string): void{
+    this.apiService.getResult(url).pipe(
+      catchError(error =>{
+      console.error("Error fetching Repo Data: ", error);
+      return of(null);
+    })
+  ).subscribe((data: any[])=>{
+    if(data && data.length>0){
+      const observables: Observable<any>[] = data.map((repo: any) =>{
+        return this.apiService.getResult(repo.tags_url).pipe(
+          catchError(error => {
+            console.error("Error fetching tags: ", error);
+            return of([]);
+          })
+        );
     });
 
-    // this.repoUrl = this.user_data.repos_url;
-    // if(this.repoUrl){
-    //   this.apiService.getRepos(this.repoUrl).subscribe((data)=>{
-    //     this.repo_data = data;
-    //     localStorage["repo-"+this.user_name] = this.repo_data;
-    //     console.log(this.repoUrl);
-    //     console.log(this.repo_data);
-    //   })
-    // }
-  }
-
-  getRepo(url: string){
-    this.apiService.getResult(url).subscribe((data)=>{
-      this.no_of_repos = data.length;
-      this.count=0;
-
-      data.forEach((element:any) => {
-
-        this.apiService.getResult(element.tags_url).subscribe((tags)=>{ 
-          
-          this.repo = {
-            "name": "",
-            "description": "",
-            "tags": []
-          };
-          
-          this.count++;
-
-          this.repo.name = element?.name;
-          this.repo.description = element?.description;
-          this.repo.tags = tags;
-          this.repo_data.push(this.repo);
-
-          // console.log(this.repo);
-          // console.log(this.repo_data);
-
-          console.log(this.repo_data);
-
-
-          if(this.count==this.no_of_repos){
-            localStorage["repo-"+this.user_name] = JSON.stringify(this.repo_data);
-            console.log(this.repo_data);
-          }
-        })
+    forkJoin(observables).subscribe((tags: any[])=>{
+      this.repo_data = data.map((repo: any, index: number) => {
+        return {
+          "name": repo.name,
+          "description": repo.description,
+          "tags": tags[index]
+        };
       });
-
-      // Case when there are no repos
-      if(this.no_of_repos==0){
-        localStorage["repo-"+this.user_name] = JSON.stringify(this.repo_data);
-        // console.log(this.repo_data);
-      }
-    
+      console.log(this.repo_data);
+      localStorage.setItem(`repo-${this.user_name}`, JSON.stringify(this.repo_data));
+    });
+    }
     })
   }
 }
