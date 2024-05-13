@@ -1,14 +1,14 @@
-<mat-card class="profile-card"  *ngIf="ProfileData.githubURL">
+<mat-card class="profile-card"  *ngIf="ProfileData?.githubURL">
     <div class="outer-profile">
         <img mat-card-avatar class="profile-image" src= {{ProfileData.profileURL}} alt="profile"/>
         <div class="profile-right">
             <mat-card-title *ngIf="ProfileData.name">{{ProfileData.name}}</mat-card-title>
             <mat-card-subtitle>{{ProfileData.bio}}</mat-card-subtitle>
-            <mat-card-subtitle>
+            <mat-card-subtitle *ngIf="ProfileData.location">
                 <fa-icon [icon]="faLocation" style="margin-right: 10px;"></fa-icon>
                 {{ProfileData.location}}
             </mat-card-subtitle>
-            <mat-card-subtitle>Twitter: {{ProfileData.twitterURL}}</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="ProfileData.twitterURL != 'https://twitter.com/null'">Twitter: {{ProfileData.twitterURL}}</mat-card-subtitle>
         </div>
     </div>
     <mat-card-subtitle class="profile-lower">

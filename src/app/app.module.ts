@@ -18,7 +18,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     SearchComponent,
     UserInfoComponent,
     UserProfileComponent,
-    UserRepoComponent
+    UserRepoComponent,
   ],
   imports: [
     BrowserModule,

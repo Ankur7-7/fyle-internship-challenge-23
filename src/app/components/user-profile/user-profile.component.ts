@@ -9,15 +9,7 @@ import { faLocationDot, faLink } from '@fortawesome/free-solid-svg-icons';
 })
 export class UserProfileComponent {
 
-  @Input() ProfileData : User={
-    "name": "",
-    "bio": "",
-    "location": "",
-    "profileURL": "",
-    "githubURL": "",
-    "repoURL": "",
-    "twitterURL": ""
-  };
+  @Input() ProfileData : any;
 
   faLocation = faLocationDot;
   faLink = faLink;

@@ -22,7 +22,6 @@ export class UserRepoComponent implements OnInit, OnChanges{
 
   ngOnChanges(change: SimpleChanges): void {
     if(change['Repos'] && this.Repos){
-      console.log("Repo changed");
       this.pageSize = 10;
       this.pageIndex = 0;
       this.updatePage();

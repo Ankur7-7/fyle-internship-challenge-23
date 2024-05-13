@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AppModule } from './app.module';
 import { AppComponent } from './app.component';
 import { ApiService } from './services/api.service';
 import { of, throwError } from 'rxjs';
@@ -13,7 +17,7 @@ describe('AppComponent', () => {
     apiServiceSpy = jasmine.createSpyObj('ApiService', ['getUserData', 'getResult']);
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, HttpClientTestingModule, FormsModule, AppModule],
       providers: [{ provide: ApiService, useValue: apiServiceSpy }]
     }).compileComponents();
   });
